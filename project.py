@@ -6,13 +6,6 @@ pygame.init()
 size = (400, 500)
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
-# shipposx = 0
-# rocketposx = 0
-# rocketposy = 0
-# enemyshipposx = 0
-# enemyshipposy = 0
-# timeboom = 0
-
 Rockets = pygame.sprite.Group()
 Enemy_ships = pygame.sprite.Group()
 Enemy_ships2 = pygame.sprite.Group() 
@@ -49,7 +42,7 @@ class My_ship(pygame.sprite.Sprite):
         self.image = My_ship.image
         self.rect = self.image.get_rect()
         self.rect.x = 175
-        self.rect.y = 400
+        self.rect.y = 450
 
     def update(self):
         if event.type == pygame.KEYDOWN:
@@ -65,6 +58,10 @@ class My_ship(pygame.sprite.Sprite):
             self.rect.x = -self.rect.x
         if pygame.sprite.spritecollideany(self, vertical_borders):
             self.rect.x = 355
+        # if pygame.sprite.spritecollideany(self, Enemy_ships2):
+        #     print(1234)
+        # if pygame.sprite.spritecollideany(self, Enemy_ships):
+        #     print(1234)
                 
 class Enemy_ship(pygame.sprite.Sprite):  
     star = load_image("car2.png")
@@ -78,7 +75,8 @@ class Enemy_ship(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = randint(0, 350)
         self.rect.y = -50
-        self.destroyedat_y = 0
+        self.add(Enemy_ships)
+        #self.destroyedat_y = 0
         self.delaytodisappear_y = 0
     
     def update(self):
@@ -86,10 +84,10 @@ class Enemy_ship(pygame.sprite.Sprite):
         fps = 100
         self.rect.y += v / fps
         if pygame.sprite.spritecollideany(self , Rockets):
-            self.destroyedat_y = self.rect.y
+            #self.destroyedat_y = self.rect.y
             self.delaytodisappear_y += v / fps
             self.image = self.boom_image
-            if int(self.delaytodisappear_y) >= 10:
+            if int(self.delaytodisappear_y) >= 15:
                 self.kill()
 
 class Enemy_ship2(pygame.sprite.Sprite):  
@@ -104,7 +102,8 @@ class Enemy_ship2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = randint(0, 350)
         self.rect.y = -50
-        self.destroyedat_y = 0
+        self.add(Enemy_ships)
+        #self.destroyedat_y = 0
         self.delaytodisappear_y = 0
     
     def update(self):
@@ -112,7 +111,7 @@ class Enemy_ship2(pygame.sprite.Sprite):
         fps = 100
         self.rect.y += v / fps
         if pygame.sprite.spritecollideany(self , Rockets):
-            self.destroyedat_y = self.rect.y
+            #self.destroyedat_y = self.rect.y
             self.delaytodisappear_y += v / fps
             self.image = self.boom_image2
             if int(self.delaytodisappear_y) >= 20:
@@ -127,8 +126,9 @@ class Rocket(pygame.sprite.Sprite):
         self.image = Rocket.image
         self.rect = self.image.get_rect()
         self.rect.x = My_ship.possition + 20
-        self.rect.y = 395
+        self.rect.y = 445
         self.add(Rockets)
+        self.destroyway_y = 0
     
     def update(self):
         v = 300
@@ -136,6 +136,14 @@ class Rocket(pygame.sprite.Sprite):
         self.rect.y -= v / fps
         if self.rect.y <= 0:
             self.kill()
+        # if pygame.sprite.spritecollideany(self, Enemy_ships2):
+        #     self.destroyway_y += v / fps
+        #     if int(self.destroyway_y) >= 30:
+        #         self.kill()
+        # if pygame.sprite.spritecollideany(self, Enemy_ships):
+        #     self.destroyway_y += v / fps
+        #     if int(self.destroyway_y) >= 30:
+        #         self.kill()
 
 class Wall(pygame.sprite.Sprite):
     wall = load_image("space.png")
@@ -190,7 +198,6 @@ Rocket(all_sprites)
 Enemy_ship(all_sprites)
 Enemy_ship2(all_sprites)
 Border(vertical_borders)
-start_ticks = pygame.time.get_ticks()
 timershowstar = 0
 timershowstar2 = 0
 rockettime = 0
